@@ -6,9 +6,11 @@ BOM => Browser Object Model 浏览器对象模型
 ## Points
 
 DOM ==(core)=> Document
+
 BOM ==(core)=> Window
 
 Window 具有 navigator, history 等对象 => Window 主要负责浏览器的交互行为
+
 Document 具有 links, forms 等对象 => Document 主要负责页面节点的行为
 
 Window 具有 document 属性 => Window 是 Document 的父级 => BOM 是 DOM 的父级

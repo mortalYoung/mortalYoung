@@ -41,7 +41,7 @@ symlinkDir(
 
 执行这段文件可以看到在当前 `test` 目录下生成了 `symlink` 文件
 
-![image](http://github.com/mortalYoung/mortalYoung/raw/master/images/symlink-menu.png)
+![image](https://raw.githubusercontent.com/mortalYoung/mortalYoung/master/images/symlink-menu.png)
 
 但是当你去点击该文件的时候会遇到 `Error` 信息如下
 

@@ -167,6 +167,12 @@ D:\projects\test
 
 不过按照官方注释来看，生成的是一个 `invalid symlink`
 
+但是我不认为这是一个 `invalid symlink` 
+
+因为我用 `mklink /J symlint index.js` 命令创建的 `symlint` 文件和用 `fs.symlint` 命令创建的文件所表现出来的形式是一样的
+
+所以我不知道 `node` 源码里提到的 `invalid symlink` 到底是不是指的这种
+
 如果你凑巧看到这边文档，并且你也知道在 `windows` 下生成的 `valid symlink` 是怎么样的
 
 请告诉你是怎么实现的

@@ -1,24 +1,35 @@
-### Hi Everyone 👋
+- Are ya ready kids?
 
-Welcome to my github pages.
+- Aye captain!
 
-<!--
-**mortalYoung/mortalYoung** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+- I can't heeeaaar yooouuuuuuuuuuuuuuu!
 
-Here are some ideas to get you started:
+- AYE CAPTAIN!
 
-- 🔭 I’m currently working on ...
-- 🌱 I’m currently learning ...
-- 👯 I’m looking to collaborate on ...
-- 🤔 I’m looking for help with ...
-- 💬 Ask me about ...
-- 📫 How to reach me: ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
--->
+- ooooooooooooooo
 
+- Who lives in a pineapple under the sea?
 
+- Sponge Bob Square Pants!
 
-![My github stats](https://github-readme-stats.vercel.app/api?username=mortalYoung&show_icons=true&theme=dark&count_private=true)
+- Absorbent and yellow and porous is he.
 
-![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=mortalYoung&layout=compact)
+- Sponge Bob Square Pants!
+
+- If nautical nonsense be somethin' ya wish.
+
+- Sponge Bob Square Pants!
+
+- Then drop on the deck and flop like a fish.
+
+- Sponge Bob Square Pants!
+
+- Ready?
+
+**Sponge Bob Square Pants**
+
+**Sponge Bob Square Pants**
+
+**Sponge Bob Square Pants**
+
+**Sponge Booob Square Paaants!**

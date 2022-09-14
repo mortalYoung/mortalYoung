@@ -26,4 +26,21 @@ And now based on these field, we should acheive the engine.
 
 [omitted.]
 
-###
+### Then
+
+And then we could create components based on specific data like the following:
+```js
+const data = {
+    type: 'number',
+    title: 'title',
+    name: 'sourceId,
+}
+```
+
+But, that's not enough. We need `widget` to allow user to specify the component. Besides, we still need component key for ensure re-render component each time.
+
+### Finally
+
+We define `bind` and `depends` to make relationship between components.
+
+For more details, see [Taier-ui](https://github.com/DTStack/Taier/blob/feat_1.3/taier-ui/src/pages/editor/dataSync/index.tsx)

@@ -12,13 +12,24 @@
 </div>
 
 <p align="center">I'm from China as a <strong>Front-End engineer</strong>. I'm currently working on <strong>DTStack</strong>.<p>
-<p align="center">Has some personal views about <strong>Low-Code/No-Code</strong>, <strong>Web IDE</strong>, <strong>UI Library Design</strong>, and so on.</p>
+<p align="center">
+ Have been tried to struggle in 
+ <p align="center">
+  <img src="https://img.shields.io/badge/UI Library-blue" />
+  <img src="https://img.shields.io/badge/SaSS-blue" />
+  <img src="https://img.shields.io/badge/Node.js-CLI devtool-blue" />
+  <img src="https://img.shields.io/badge/Web IDE-blue" />
+  <img src="https://img.shields.io/badge/MVC-blue" />
+  <img src="https://img.shields.io/badge/FrontEnd Performance-blue" />
+  <img src="https://img.shields.io/badge/devops-blue" />
+ </p>
+</p>
 
 
 ## 📚 Tech
 ![Static Badge](https://img.shields.io/badge/MacOS-blue)
-![Static Badge](https://img.shields.io/badge/VSCode-blue)
-![Static Badge](https://img.shields.io/badge/JavaScript-blue)
+![Static Badge](https://img.shields.io/badge/IDE-Plugin-blue)
+![Static Badge](https://img.shields.io/badge/JavaScript-TypeScript-blue)
 ![Static Badge](https://img.shields.io/badge/Node.js-blue)
 ![Static Badge](https://img.shields.io/badge/React-blue)
 

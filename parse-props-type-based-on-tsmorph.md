@@ -29,15 +29,15 @@
 ### 准备工作
 
 - 首先我们需要明确的目标是**我们要基于 `ts-morph` 来实现解析组件的参数**
-- 其次，我们需要知道组件分为函数组件和类组件, 而每种组件的 export 方式也不尽相同，至少有两种以上的写法，包括`直接 export` 和 `间接 export`
+- 其次，我们需要知道组件分为函数组件和类组件, 而每种组件的 export 方式也不尽相同，至少有两种以上的写法，包括 ` 直接 export` 和 ` 间接 export`
 
 以函数组件为例
 
 ```ts
 // 直接 export
-export default FunctionComponent = () => {};
+export default FunctionComponent = ()=> {};
 // 间接 export
-const FunctionComponent = () => {};
+const FunctionComponent = ()=> {};
 export default FunctionComponent;
 ```
 
@@ -54,17 +54,17 @@ export default FunctionComponent;
 ```
 ├── package.json
 ├── __test__
-│   ├── assignments.tsx # 函数组件-间接 export
-│   ├── index.tsx # 函数组件-直接 export
-│   ├── reactComponent.tsx # Class 组件-直接 export
-│   └── classAssignments.tsx  # Class 组件-间接 export
+│   ├── assignments.tsx # 函数组件 - 间接 export
+│   ├── index.tsx # 函数组件 - 直接 export
+│   ├── reactComponent.tsx # Class 组件 - 直接 export
+│   └── classAssignments.tsx  # Class 组件 - 间接 export
 └── index.js
 ```
 
 接下来，我只需要在 `index.js` 中解析就可以了
 
 ```js
-const { Project } = require("ts-morph");
+const {Project} = require("ts-morph");
 
 const project = new Project();
 // 添加文件到 project 这个对象中去
@@ -82,7 +82,7 @@ const exportAssignments = sourceFile.getExportAssignments();
 
 然后从 project 对象中获取源文件，再通过获取源文件的 getExportAssignments 方法来获取到当前 `index.tsx` 文件中全部的 export assignments 的语句
 
-> **注**：这里获取到的 `exportAssignments` 这个参数有可能为空数组，即文件中不存在 export assignments 的语句，比如 Class 组件-直接 export 就不存在 exportAssignments
+> **注**：这里获取到的 `exportAssignments` 这个参数有可能为空数组，即文件中不存在 export assignments 的语句，比如 Class 组件 - 直接 export 就不存在 exportAssignments
 
 ```js
 // 获取到 export default 的那条声明语句
@@ -91,7 +91,7 @@ const defaultExport = exportAssignments.find((i) => !i.isExportEquals());
 const type = defaultExport.getExpression().getType();
 ```
 
-由于我们拿 `index.tsx` 来做测试，所以 `exportAssignments` 不存在空的情况，所以直接继续执行了。如果是 Class 组件-直接 export 的方式，需要去判断该值是否为空
+由于我们拿 `index.tsx` 来做测试，所以 `exportAssignments` 不存在空的情况，所以直接继续执行了。如果是 Class 组件 - 直接 export 的方式，需要去判断该值是否为空
 
 > **注**: 这里拿到的类型是整个组件的类型 而不是 props 的类型, 即类似于 `(props:TestProps) => JSX.Element` 这种类型
 
@@ -116,8 +116,7 @@ const callsignatures = type.getCallSignatures()[0];
 // 获取到参数的声明的类型,
 // 可能存在多个的情况 所以 propsType 是数组
 const propsType = callsignatures
-  .getParameters()
-  .map((p) => p.getValueDeclaration().getType());
+  .getParameters().map((p) => p.getValueDeclaration().getType());
 
 propsType.forEach((pType) => {
   // 解析类型
@@ -126,7 +125,7 @@ propsType.forEach((pType) => {
 // 完成
 ```
 
-> 函数的方法名+形参列表，就叫做该函数的方法签名。
+> 函数的方法名 + 形参列表，就叫做该函数的方法签名。
 
 通过获取签名再获取参数再获取参数声明的类型就可以了
 
@@ -158,7 +157,7 @@ mockTransformType(propsType);
 
 这里通过获取默认导出的那一行语句的表达的文本来获取到类组件的名称
 
-> **注**：该情况只适用于 Class 组件-间接 export
+> **注**：该情况只适用于 Class 组件 - 间接 export
 
 然后通过 `getClass` 获取到类，再通过 `getExtends` 获取到继承的类型，再通过 `getTypeArguments` 获取到继承类的类型参数
 
@@ -170,11 +169,11 @@ mockTransformType(propsType);
 
 ---
 
-还没完，上文提到了这种方法只适用于 Class 组件-间接 export ，我们还有 Class 组件-直接 export 需要解析
+还没完，上文提到了这种方法只适用于 Class 组件 - 间接 export ，我们还有 Class 组件 - 直接 export 需要解析
 
 ---
 
-思路回到 `exportAssignments` 变量声明的地方，我们提到过当组件为 Class 组件-直接 export 方式的时候获取到的该变量为空数组，那我就借助这个条件来区分是否为 Class 组件-直接 export，并对该方式的组件单独处理
+思路回到 `exportAssignments` 变量声明的地方，我们提到过当组件为 Class 组件 - 直接 export 方式的时候获取到的该变量为空数组，那我就借助这个条件来区分是否为 Class 组件 - 直接 export，并对该方式的组件单独处理
 
 ```js
 if (!exportAssignments.length) {
@@ -183,9 +182,7 @@ if (!exportAssignments.length) {
   const propsType = defaultclass.getExtends().getTypeArguments()[0].getType();
   // 解析类型
   mockTransformType(propsType);
-}else{
-  ...
-}
+}else{...}
 ```
 
 代码一看就懂就不解释了

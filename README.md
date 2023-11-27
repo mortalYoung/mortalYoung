@@ -1,8 +1,11 @@
 <h1 align="center">
  Hi guys, It's Yang.
 </h1>
+<div>
 
-[![Typing SVG](https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&center=true&vCenter=true&width=600&separator=%3C&lines=console.log(%22hello+world%22);)](https://git.io/typing-svg)
+<div align="center">
+<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&center=true&vCenter=true&width=600&separator=%3C&lines=console.log(%22hello+world%22);" alt="Typing SVG" width="600" />
+</div>
 
 <div align="center">
 
@@ -37,3 +40,4 @@
 | Github Stats | Top Languages |
 | --- | --- |
 | <img align="center" src="https://github-readme-stats.vercel.app/api?username=mortalyoung&show_icons=true&theme=radical" /> |   <img align="center" src="https://github-readme-stats.vercel.app/api/top-langs/?username=mortalyoung&layout=compact&theme=radical" /> |
+

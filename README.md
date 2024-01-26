@@ -12,6 +12,8 @@
  ![status](https://img.shields.io/badge/status-up-brightgreen) 
 ![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FmortalYoung&countColor=%232ccce4&style=flat)
 
+<img src="./images/avatar.svg" width="130" alt="avatar" />
+
 </div>
 
 <p align="center">I'm from China as a <strong>Front-End engineer</strong>. I'm currently working on <strong>DTStack</strong>.<p>

@@ -3,7 +3,39 @@
 
 # VSCode 源码解析
 
-## src/main.ts
+## 目录
+- [启动流程概览](#启动流程概览)
+- [启动前初始化阶段 (beforeReady)](#启动前初始化阶段-beforeready)
+  - [性能优化](#性能优化)
+  - [便携式判断](#便携式判断)
+  - [沙盒配置](#沙盒配置)
+  - [UserData](#userdata)
+  - [CodeCache](#codecache)
+  - [禁用默认菜单](#禁用默认菜单)
+  - [崩溃报告](#崩溃报告)
+  - [注册自定义协议](#注册自定义协议)
+  - [全局应用监听器](#全局应用监听器)
+  - [国际化配置](#国际化配置)
+- [应用就绪阶段 (ready)](#应用就绪阶段-ready)
+  - [性能跟踪](#性能跟踪)
+  - [创建代码缓存目录](#创建代码缓存目录)
+  - [解析国际化配置](#解析国际化配置)
+  - [核心启动流程](#核心启动流程)
+- [引导模块系统 (bootstrap-esm.ts)](#引导模块系统-bootstrap-esmts)
+  - [fs 模块映射原理](#fs-模块映射原理)
+- [主进程启动 (main.ts)](#主进程启动-maints)
+  - [启动流程](#启动流程)
+  - [应用启动方法](#应用启动方法)
+- [窗口管理核心逻辑](#窗口管理核心逻辑)
+  - [打开第一个窗口](#打开第一个窗口)
+  - [窗口打开实现](#窗口打开实现)
+  - [窗口创建与配置](#窗口创建与配置)
+  - [窗口加载过程](#窗口加载过程)
+- [总结](#总结)
+
+## 启动流程概览
+
+VS Code 的启动流程可以分为几个主要阶段，如下图所示：
 
 ```mermaid
 flowchart LR
@@ -33,12 +65,17 @@ flowchart LR
 beforeReady-->ready
 ```
 
+## 启动前初始化阶段 (beforeReady)
+
 ### 性能优化
+
+在启动初期，VS Code 立即设置性能标记点，用于后续分析和优化启动性能。
+
 ### 便携式判断
+
 ```typescript
 // Enable portable support
 const portable = configurePortable(product);
-...
 ...
 // Set logs path before app 'ready' event if running portable
 // to ensure that no 'logs' folder is created on disk at a
@@ -48,12 +85,11 @@ if (portable && portable.isPortable) {
 	app.setAppLogsPath(path.join(userDataPath, 'logs'));
 }
 ```
+
 ### 沙盒配置
 
 <details>
-
 <summary>Github Copilot</summary>
-
 
 > # VS Code 沙盒配置分析
 > 这段代码负责配置 VS Code 中的 Electron 沙盒（sandbox）机制，这是一个重要的安全特性。
@@ -70,16 +106,12 @@ if (portable && portable.isPortable) {
 > - 默认行为：
 >   - 如果以上条件都不满足，则同时禁用普通沙盒和 GPU 沙盒
 > 这是 Electron 应用程序中提高安全性的关键配置，用于隔离应用程序的不同部分，防止潜在的安全漏洞。
-
-
 </details>
 
 ### UserData
 
 <details>
-
 <summary>Github Copilot</summary>
-
 
 > # `userData` 配置代码分析
 > 这段代码是 VS Code 的核心逻辑，负责设置应用程序的用户数据路径。
@@ -113,15 +145,12 @@ if (portable && portable.isPortable) {
 > - 如果是，调用 `addUNCHostToAllowlist` 函数将该网络主机添加到允许列表中
 > - 这确保了 VS Code 可以正确访问存储在网络位置的用户数据
 > 这个 UNC 路径处理确保 VS Code 在企业环境中正常工作，即使用户配置文件存储在网络位置。
-
 </details>
 
 ### CodeCache
 
 <details>
-
 <summary>Github Copilot</summary>
-
 
 > # `codeCachePath` 的作用分析
 > 这段代码是 VS Code 的核心优化逻辑，用于获取代码缓存路径。
@@ -161,15 +190,12 @@ if (portable && portable.isPortable) {
 > process.env['VSCODE_CODE_CACHE_PATH'] = codeCachePath || '';
 > ```
 > 这个优化对 VS Code 的快速启动至关重要，尤其当应用规模不断增长时。
-
 </details>
 
-### Disabled Default Menu
+### 禁用默认菜单
 
 <details>
-
 <summary>Github Copilot</summary>
-
 
 > # `Menu.setApplicationMenu(null)` 分析
 > 这行代码是 VSCode 的**核心逻辑**部分，而不是处理边界情况。
@@ -184,17 +210,16 @@ if (portable && portable.isPortable) {
 > ## 实现原因
 > 注释中引用的 GitHub issue (#35512) 说明这是有意为之的设计选择，与 Electron 默认菜单行为有关。VSCode 需要完全控制其菜单系统，以提供一致的跨平台体验和丰富的自定义选项。
 > 此代码与沙盒配置、用户数据路径设置等一样，都是 VSCode 启动过程中的基础设置步骤，属于应用程序初始化阶段的核心逻辑。
-
-
 </details>
 
-### Crash Reporter
-### Register custom schemes
+### 崩溃报告
+
+VS Code 在启动过程中配置崩溃报告器，以捕获应用程序的意外崩溃并提供诊断信息。
+
+### 注册自定义协议
 
 <details>
-
 <summary>Github Copilot</summary>
-
 
 > # 自定义协议注册分析
 > 这段代码是 VS Code 的**核心逻辑**，负责注册和配置 VS Code 使用的两个关键自定义 URL 协议。
@@ -221,17 +246,12 @@ if (portable && portable.isPortable) {
 >    - 支持代码缓存以提高性能
 > 这是 VS Code 架构的基础部分，没有这些自定义协议的注册，编辑器的许多核心功能（如扩展 UI、Markdown 预览、自定义编辑器等）都无法正常工作。
 > 这些协议注册必须在应用初始化阶段完成，以确保 Electron 的渲染器进程能够正确识别和处理这些特殊 URL。
-> Similar code found with 1 license type
-
-
 </details>
 
-### Global Listeners
+### 全局应用监听器
 
 <details>
-
 <summary>Github Copilot</summary>
-
 
 > # `registerListeners()` 分析
 > 这段代码是 VS Code 的**核心逻辑**，负责设置全局应用程序事件监听器。
@@ -274,16 +294,12 @@ if (portable && portable.isPortable) {
 > }
 > ```
 > 这是 VS Code 启动流程的核心部分，确保应用程序能够正确响应各种外部请求。
-
-
 </details>
 
-### 国际化
+### 国际化配置
 
 <details>
-
 <summary>Github Copilot</summary>
-
 
 > # VS Code 国际化配置分析
 > 这段代码是 VS Code 的**核心逻辑**和**边界情况处理**的结合，负责设置应用程序的国际化（i18n）支持。
@@ -325,16 +341,14 @@ if (portable && portable.isPortable) {
 > 3. 微软伪语言包 (`qps-ploc`) 的特殊处理
 > 4. macOS 平台的特殊处理（不设置区域设置）
 > 这是 VS Code 作为全球化应用程序的关键部分，确保不同语言环境的用户都能获得良好体验。
-
-
 </details>
 
-### Trace
+## 应用就绪阶段 (ready)
+
+### 性能跟踪
 
 <details>
-
 <summary>Github Copilot</summary>
-
 
 > # 调试跟踪配置代码分析
 > 这段代码是**边界情况处理**，专门用于支持调试和性能分析场景，而不是 VS Code 的核心运行逻辑。
@@ -387,17 +401,20 @@ if (portable && portable.isPortable) {
 > - 仅在特定命令行参数存在时才激活
 > - 服务于调试/诊断而非核心功能
 > - 普通用户几乎不会使用这些参数
-
-
 </details>
 
-### startup
+### 创建代码缓存目录
 
+在应用就绪后，VS Code 会检查并创建代码缓存目录，以确保后续的代码缓存操作能够正常进行。
+
+### 解析国际化配置
+
+应用就绪后，完成国际化配置的最终解析，获取操作系统语言设置并应用用户指定的语言偏好。
+
+### 核心启动流程
 
 <details>
-
 <summary>Github Copilot</summary>
-
 
 > # `startup` 函数分析
 > 这段代码是 VS Code 的**核心逻辑**，实现了 VS Code 的主要启动流程。
@@ -422,16 +439,12 @@ if (portable && portable.isPortable) {
 > 3. **加载主程序**：动态导入主模块 `./vs/code/electron-main/main.js`
 > 4. **性能标记**：记录完成主程序包运行的性能时间点
 > 这个函数本质上是应用程序启动序列的核心部分，而不是处理边缘情况的代码。它代表了 VS Code 从 Electron 层到实际应用程序加载的关键转换点。
-
-
 </details>
 
-## src/bootstrap-esm.ts
+## 引导模块系统 (bootstrap-esm.ts)
 
 <details>
-
 <summary>Github Copilot</summary>
-
 
 > # bootstrap-esm.ts 文件分析
 > ## 文件作用
@@ -470,13 +483,11 @@ if (portable && portable.isPortable) {
 > 5. **性能跟踪受损**
 >    - 性能标记点缺失，影响诊断和性能分析能力
 > 这个文件是 VS Code 模块化架构和启动流程的核心部分，确保应用程序的各个组件能够正确初始化和协同工作。
-
 </details>
 
-### 为什么要把 fs 映射到 original-fs
+### fs 模块映射原理
 
 <details>
-
 <summary>Github Copilot</summary>
 
 > # Purpose of Mapping 'fs' to 'original-fs'
@@ -488,11 +499,13 @@ if (portable && portable.isPortable) {
 > 2. Uses a custom ES module loader hook to intercept 'fs' imports
 > 3. Redirects them to 'node:original-fs'
 > This ensures VS Code maintains full file system access capabilities necessary for its core functionality like reading/writing files and working with project directories.
-
 </details>
 
-## src/vs/code/electron-main/main.ts
-核心入口代码
+## 主进程启动 (main.ts)
+
+核心入口代码主要负责创建和初始化 VS Code 的主进程服务。
+
+### 启动流程
 
 ```mermaid
 flowchart LR
@@ -502,9 +515,9 @@ startup["启动"]
 createServices-->initServices-->startup
 ```
 
-## src/vs/code/electron-main/main.ts#CodeApplication.startup
+### 应用启动方法
 
-在 startup 中触发 CodeApplication 实例上的 startup 方法。该方法做了如下事情：
+在 startup 中触发 CodeApplication 实例的 startup 方法，该方法进行如下操作：
 
 ```mermaid
 flowchart LR
@@ -521,20 +534,17 @@ after["打开窗口的任务"]
 log-->platform-->ipc-->sqmId-->sharedProcess-->services-->initChannels-->invoke-->openFirstWindow-->after
 ```
 
-### 唯一标识符
+#### 唯一标识符
 
-> 它们对于设置同步等功能特别重要，在这些功能中，正确识别不同的机器对于跨多个设备同步用户数据至关重要。
+VS Code 会生成一个唯一的机器标识符。这对于设置同步等功能特别重要，在这些功能中，正确识别不同的机器对于跨多个设备同步用户数据至关重要。
 
-### 初始化ipc
-
+#### 初始化ipc
 
 <details>
-
 <summary>Github Copilot</summary>
 
- 
 > # initChannels 方法的作用
-> `initChannels` 方法在 VS Code 的主进程中负责初始化和注册进程间通信(IPC)通道。这些通道使 VS Code 的主进程能够与其他进程(如渲染进> 程和共享进程)进行通信。
+> `initChannels` 方法在 VS Code 的主进程中负责初始化和注册进程间通信(IPC)通道。这些通道使 VS Code 的主进程能够与其他进程(如渲染进程和共享进程)进行通信。
 > ## 主要功能
 > 1. **创建通信桥梁**：为 VS Code 的各个组件之间建立通信机制
 > 2. **注册服务通道**：将主进程中的各种服务转换为可通过 IPC 访问的通道
@@ -553,17 +563,14 @@ log-->platform-->ipc-->sqmId-->sharedProcess-->services-->initChannels-->invoke-
 > - **开发工具**：诊断服务、日志记录、扩展主机调试
 > - **终端相关**：终端服务、外部终端集成
 > 通过这种通道设计，VS Code 实现了一个模块化的架构，其中不同的进程可以安全地访问彼此的功能，而无需共享内存空间，提高了应用程序的稳定性和可扩展性。
-
-
 </details>
 
-### 打开首个窗口
+## 窗口管理核心逻辑
 
+### 打开第一个窗口
 
 <details>
-
 <summary>Github Copilot</summary>
-
 
 > # openFirstWindow 方法详解
 > `openFirstWindow` 方法是 VS Code 启动过程中的关键环节，负责决定首次启动时应该打开什么内容。这个方法需要处理多种启动场景，包括从协议链接、命令行参数、系统事件等各种方式启动 VS Code 时应该展示什么内容。
@@ -625,11 +632,11 @@ log-->platform-->ipc-->sqmId-->sharedProcess-->services-->initChannels-->invoke-
 > - 用户执行 `code file.txt:42` 将打开文件并跳转到第42行
 > ## 总结
 > `openFirstWindow` 方法是 VS Code 启动体验的核心，它处理了多种不同的启动场景，确保无论用户如何启动 VS Code，都能获得一致且符合预期的体验。这种灵活性使 VS Code 能够无缝集成到不同的工作流程和操作系统环境中。
-
 </details>
 
-## src/vs/platform/windows/electron-main/windowsMainService.ts#WindowsMainService.open
+### 窗口打开实现
 
+VS Code 窗口打开流程分为三个主要阶段：
 
 ```mermaid
 flowchart LR
@@ -640,7 +647,6 @@ beforeDoOpen-->doOpen-->afterOpen
 ```
 
 <details>
-
 <summary>Github Copilot</summary>
 
 > # VS Code 的 open 方法详解
@@ -720,70 +726,13 @@ beforeDoOpen-->doOpen-->afterOpen
 > 5. **文件合并**：使用 `--merge` 合并文件
 > 6. **远程开发**：处理远程开发场景下的窗口打开
 > 总之，`open` 方法是 VS Code 窗口系统的核心入口点，协调了所有窗口打开操作，确保用户体验的一致性和可预测性。
-
 </details>
 
-## src/vs/platform/windows/electron-main/windowsMainService.ts#WindowsMainService.doOpen
+`doOpen` 方法负责确定内容应该在哪个窗口中打开，根据不同的条件，它会触发不同的窗口打开方式，其中 `openInBrowserWindow` 是创建新窗口最核心的方法。
 
-> [!note]
-> 如 Copilot 所说，这个方法里通过各种判断，会触发不同的方法，除了 `openInBrowserWindow` 是打开一个 window，其余都是在已存在的 window 中打开文件，故后续代码从 `openInBrowserWindow` 作为切入点。
+### 窗口创建与配置
 
-
-<details>
-
-<summary>Github Copilot</summary>
-
-> # WindowsMainService 中 doOpen 方法详解
-> `doOpen` 方法是 VSCode 窗口管理系统的核心实现，负责协调和处理所有打开内容（工作区、文件夹、文件）的复杂逻辑。它处理的是 "怎么打开" 的问题 —— 即确定内容应该在哪个窗口中打开。
-> ## 核心功能
-> 这个方法接收已经解析好的各种内容路径，然后决定:
-> 1. 是否使用现有窗口
-> 2. 是否需要创建新窗口
-> 3. 如何在多窗口之间分配内容
-> ## 方法参数
-> ```typescript
-> private async doOpen(
->     openConfig: IOpenConfiguration,           // 打开的配置选项
->     workspacesToOpen: IWorkspacePathToOpen[], // 要打开的工作区
->     foldersToOpen: ISingleFolderWorkspacePathToOpen[], // 要打开的文件夹
->     emptyToRestore: IEmptyWindowBackupInfo[], // 要恢复的空窗口备份
->     maybeOpenEmptyWindow: boolean,            // 是否可能需要打开空窗口
->     filesToOpen: IFilesToOpen | undefined,    // 要打开的文件
->     foldersToAdd: ISingleFolderWorkspacePathToOpen[], // 要添加到现有窗口的文件夹
->     foldersToRemove: ISingleFolderWorkspacePathToOpen[] // 要从现有窗口移除的文件夹
-> ): Promise<{ windows: ICodeWindow[]; filesOpenedInWindow: ICodeWindow | undefined }>
-> ```
-> ## 工作流程
-> 方法按照特定的顺序和优先级处理各种打开场景：
-> 1. **处理文件夹添加/移除**：
->    - 查找合适的活动窗口并在其中添加/移除文件夹
-> 2. **处理文件打开**：
->    - 如果没有要打开的工作区/文件夹，则查找最合适的窗口来打开文件
->    - 使用多种策略来找到最佳窗口（如检查文件所属工作区、使用最后活动窗口等）
->    - 如果找不到合适窗口，则创建新窗口
-> 3. **处理工作区打开**：
->    - 检查是否已有窗口打开了该工作区
->    - 对未打开的工作区，创建新窗口或复用现有窗口（根据配置决定）
-> 4. **处理文件夹打开**：
->    - 检查是否已有窗口打开了该文件夹
->    - 对未打开的文件夹，创建新窗口或复用现有窗口（根据配置决定）
-> 5. **处理空窗口恢复**：
->    - 根据备份信息恢复之前的空窗口状态（如崩溃恢复）
-> 6. **处理空窗口打开**：
->    - 如果还有未打开的文件，或用户要求打开空窗口，或没有打开任何窗口，则打开空窗口
-> ## 返回结果
-> 方法返回两个重要信息：
-> 1. 所有使用或创建的窗口列表
-> 2. 打开文件的窗口（如果有的话）
-> 这些信息被传回调用者，用于后续操作如设置焦点窗口、处理等待标记等。
-> 总之，`doOpen` 方法是 VSCode 窗口管理的核心逻辑，处理了各种复杂的打开场景，确保内容以最合适的方式打开，同时遵守用户配置和应用程序状态。
-
-</details>
-
-## src/vs/platform/windows/electron-main/windowsMainService.ts#WindowsMainService.openInBrowserWindow
-
-> [!note]
-> 在 VSCode 中 `this.instantiationService.createInstance(Ctor, { xxx })` 这种代码等价于 `new Ctor({})`。因为要处理 IOC，可以参考 [vscode-service](./vscode-service.md)
+窗口创建流程主要包括以下步骤：
 
 ```mermaid
 flowchart LR
@@ -793,9 +742,7 @@ doOpenInBrowserWindow["doOpenInBrowserWindow"]
 before-->createWindow-->doOpenInBrowserWindow
 ```
 
-
 <details>
-
 <summary>Github Copilot</summary>
 
 > # VS Code 的 openInBrowserWindow 方法详解
@@ -831,13 +778,9 @@ before-->createWindow-->doOpenInBrowserWindow
 > 7. 解析并设置用户配置文件
 > 8. 使用配置加载窗口
 > 这个方法是整个 VS Code 窗口系统的基石，确保窗口按照正确且一致的方式创建和加载，同时支持崩溃恢复和会话保存等高级功能。
-
 </details>
 
-### doOpenInBrowserWindow
-
 <details>
-
 <summary>Github Copilot</summary>
 
 > # VS Code 的 doOpenInBrowserWindow 方法详解
@@ -884,8 +827,9 @@ before-->createWindow-->doOpenInBrowserWindow
 > 这个方法是 VS Code 窗口生命周期中关键的一步，它确保窗口有正确的备份路径、用户配置文件以及与工作区的持久关联，这些都是 VS Code 用户体验的重要部分。
 </details>
 
-### src/vs/platform/windows/electron-main/windowImpl.ts#load
+### 窗口加载过程
 
+窗口加载过程主要分为三个阶段：
 
 ```mermaid
 flowchart LR
@@ -895,17 +839,12 @@ after["状态更新及事件触发"]
 before-->loadURL-->after
 ```
 
+核心加载代码：
 ```ts
-// 处理配置及状态更新
-...
 this._win.loadURL(FileAccess.asBrowserUri(`vs/code/electron-sandbox/workbench/workbench${this.environmentMainService.isBuilt ? '' : '-dev'}.html`).toString(true));
-...
-// 状态更新及事件触发
-
 ```
 
 <details>
-
 <summary>Github Copilot</summary>
 
 > # VS Code 中 `load` 方法的作用详解
@@ -937,6 +876,21 @@ this._win.loadURL(FileAccess.asBrowserUri(`vs/code/electron-sandbox/workbench/wo
 > 3. 确保窗口状态的正确性和一致性
 > 4. 管理渲染进程与主进程之间的配置传递
 > 总的来说，`load` 方法是窗口显示内容前的"准备阶段"，它设置了必要的状态和配置，然后触发实际的内容加载过程。
-
 </details>
+
+## 总结
+
+通过对 VS Code 源码的分析，我们可以清晰地看到它的启动流程分为几个关键阶段：
+
+1. **启动前初始化阶段**：在 Electron 的 `app.ready` 事件触发前，VS Code 完成了一系列基础配置，包括性能标记、便携模式检测、沙盒配置、用户数据路径设置、代码缓存路径确定、禁用默认菜单、崩溃报告器设置、自定义协议注册、全局事件监听器注册以及国际化支持等。
+
+2. **应用就绪阶段**：在 `app.ready` 事件触发后，VS Code 进行性能跟踪配置、创建代码缓存目录、完成国际化配置解析，最终启动核心流程。
+
+3. **模块系统初始化**：通过 `bootstrap-esm.ts` 初始化 ECMAScript 模块系统，特别是处理 `fs` 模块到 `original-fs` 的映射，以确保在 Electron 环境中正确访问文件系统。
+
+4. **主进程启动**：在 `src/vs/code/electron-main/main.ts` 中，创建和初始化核心服务，然后启动应用程序主流程，包括日志系统、平台特定配置、IPC 通道初始化、唯一标识符生成、共享进程管理等。
+
+5. **窗口管理**：最终，VS Code 通过 `openFirstWindow` 方法打开第一个窗口，根据不同的启动场景（如命令行参数、协议链接、文件拖放等）决定打开什么内容。窗口的创建和配置通过 `openInBrowserWindow` 和 `doOpenInBrowserWindow` 方法完成，最后通过 `load` 方法加载实际的窗口内容。
+
+这种多阶段的启动设计使 VS Code 能够灵活处理各种启动场景和用户需求，同时保持性能和稳定性。模块化的架构和服务设计也使得代码组织清晰，便于维护和扩展，为 VS Code 作为一个功能强大且高度可定制的编辑器提供了坚实的基础。
 

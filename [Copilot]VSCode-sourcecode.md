@@ -895,3 +895,5 @@ this._win.loadURL(FileAccess.asBrowserUri(`vs/code/electron-sandbox/workbench/wo
 
 这种多阶段的启动设计使 VS Code 能够灵活处理各种启动场景和用户需求，同时保持性能和稳定性。模块化的架构和服务设计也使得代码组织清晰，便于维护和扩展，为 VS Code 作为一个功能强大且高度可定制的编辑器提供了坚实的基础。
 
+## 参考资料
+[Source Code Organization](https://github.com/microsoft/vscode/wiki/Source-Code-Organization)

@@ -485,28 +485,72 @@ export class InlineChatZoneWidget extends ZoneWidget {...}
 
 ##### 创建或关联 sessionId
 
-TODO
+创建一个 Session 实例，用于表示新创建的 inline Chat 会话。
+
+Session 实例的创建，需要提供 chatAgent（从 chatAgentService 获取），chatModel（options 提供的或者借助 chatService 创建新的），textModelN（当前编辑器的 model），textModel0（当前编辑器 model 的一个快照），wholeRange（options 提供或者当前选中的文案范围）。
 
 #### INIT_UI
 
-TODO
+- 重置/清空状态
+- 创建输入框（绑定 widget 和 chatModel、初始化 placeholder）
+- 事件处理
+- 基于已有的 requests 渲染界面
+
+如果当前存在进行中的 requests，则跳转 `State.SHOW_REQUEST` 状态，否则跳转到 `State.WAIT_FOR_INPUT` 状态。
 
 #### WAIT_FOR_INPUT
 
-TODO
+- 初始化 Message 状态，该状态表示当前回答状态，初始态是 `Message.NONE = 0`
+- 初始化 Barrier 类和 DisposableStore 类
+	- Barrier 类在初始化的时候是 closed 的状态，只有在执行 `barrier.open` 后，状态变更为 open。同时支持 `barrier.wait` 监听状态的变更。
+- 监听事件处理
+	- 当 chatModel 触发 onDidChange 且事件类型是 addRequest。则状态变更为 `Message.ACCEPT_INPUT =  1 << 5`，同时 `barrier.open`
+	- 当用户触发 accept 或者 discard 时，触发对应的方法，同时 `barrier.open`
+- 执行 `await barrier.wait()`，等待状态变更为 open
+- 回收资源以及基于 Message 状态变更 State 状态
+
+如果当前结束时，Message 的状态为 Message.CANCEL_INPUT 或 Message.CANCEL_SESSION，则变更为 `State.CANCEL`。
+
+如果 Message 的状态为 Message.PAUSE_SESSION 则变更为 `State.PAUSE`。
+
+如果 Message 的状态为 Message.ACCEPT_SESSION 则变更为 `State.ACCEPT`。
+
+如果没有返回值，则变更为 `State.WAIT_FOR_INPUT`。
+
+最后用正常状态为 `State.SHOW_REQUEST` 结束。
 
 #### SHOW_REQUEST
 
-TODO
+- 前期准备，主要是一些状态的初始化，以及类的实例化
+	- 初始化一个 responsePromise，该类除非调用 `responsePromise.complete`，否则不会被 resolve
+- 初始化下一个状态为 `State.WAIT_FOR_INPUT`, 添加监听事件
+	- 监听 Message 状态的变更
+	- 监听 chatModel 的 onDidChange 事件
+		- 如果事件类型是 removeRequest，则判断如果是重新发送，则状态变更为 `State.SHOW_REQUEST` 否则变更为 `State.CANCEL`
+		- 如果事件类型是 move，则状态变更为 `State.CANCEL`
+- 处理 response 事件
+	- 从 response 中解构出相关 edits（从源码看起来 edits 并非增量，所以每次触发 response.onDidChange 事件还需要记录 lastLength）
+	- 在队列中触发异步函数，确保每次仅执行一个。每次触发遍历 edits，执行 `_makeChanges` 方法
+	- 处理完成后，需要更新 widget 的位置
+	- 在收到 response.isCanceled 或者 response.isComplete 时，执行 `responsePromise.complete` 方法
+- 等待直到 request 结束并且队列空闲（即 edits 都添加完成）
+- 处理完成后，计算 diff，重新布局，回收监听事件等
+
+如果在监听事件阶段，所有的事件都没有触发，则默认下一个状态为 `State.WAIT_FOR_INPUT`。等待用户下一次输入，否则跳转对应状态。
+
 
 #### ACCEPT
 
-TODO
+- 重置 Widget，重置 session，销毁 strategy
+- 在重置 session 之前需要执行 releaseSession 的操作
+- 执行 strategy.apply() 以应用当前回答的 edits
 
 #### PAUSE
 
-TODO
+- 重置 Widget，重置 session，销毁 strategy
 
 #### CANCEL
 
-TODO
+- 重置 Widget，重置 session，销毁 strategy
+- 执行 strategy.cancel() 以取消应用当前回答的 edits
+- 相比 State.PAUSE 状态做的事，该状态多一个判断 session 是否需要 stash 的操作

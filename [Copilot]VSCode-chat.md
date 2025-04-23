@@ -5,23 +5,32 @@
 
 chat 作为 VSCode 中的 contrib 进行加载。
 
+## 目录
+1. [Chat 界面初始化](#chat-界面初始化)
+2. [发送消息](#发送消息)
+   - [acceptInput](#acceptinput)
+   - [sendRequest](#sendrequest)
+   - [_sendRequestAsync](#_sendrequestasync)
+3. [消息渲染](#消息渲染)
+4. [inlineChat](#inlinechat)
+   - [StartSessionAction](#startsessionaction)
+   - [InlineChatController](#inlinechatcontroller)
+5. [总结](#总结)
+
 ## Chat 界面初始化
 
-详见 [VSCode-view](./[Copilot]VSCode-view.md)
+详见 [VSCode-view](./[Copilot]VSCode-view.md)。
 
-这里我们知道，Chat 界面相关的创建逻辑是通过 ChatViewPane 类在 ViewPaneContainer 中被实例化，并且执行 render 方法，执行到 renderBody 方法。所以接下来分析 renderBody 方法。
+Chat 界面的创建逻辑通过 `ChatViewPane` 类在 `ViewPaneContainer` 中被实例化，并执行 `render` 方法，最终调用 `renderBody` 方法。以下是主要步骤：
 
-首先，先创建实例化 ChatViewWelcomeController 类，用来处理欢迎界面相关的逻辑。
-
-然后，新建一个 scopedInstantiationService，重写 ContextKeyService。
-
-用这个 scopedInstantiationService 实例化 ChatWidget 类。
-
-然后，执行 ChatWidget 类的 render 方法。
-
-然后获取缓存的 ChatModel，如果没有的话，则通过 chatService 的 startSession 方法新建一个，并更新 ChatWidget 中的相关数据。
+1. 实例化 `ChatViewWelcomeController` 类，处理欢迎界面逻辑。
+2. 创建 `scopedInstantiationService`，并重写 `ContextKeyService`。
+3. 使用 `scopedInstantiationService` 实例化 `ChatWidget` 类。
+4. 执行 `ChatWidget` 的 `render` 方法。
+5. 获取缓存的 `ChatModel`，如果不存在，则通过 `chatService` 的 `startSession` 方法新建，并更新 `ChatWidget` 的相关数据。
 
 相关代码如下：
+
 ```typescript
 export class ChatViewPane extends ViewPane implements IViewWelcomeDelegate {
     ...
@@ -62,7 +71,7 @@ export class ChatViewPane extends ViewPane implements IViewWelcomeDelegate {
 
 ## 发送消息
 
-不论是通过快捷键发送消息，还是通过点击发送按钮，或者通过下拉菜单的发送项。最终触发的都是 SubmitAction 的 run 方法。具体参考 [VSCode-action](./[Copilot]VSCode-action.md)
+无论是通过快捷键、点击发送按钮，还是通过下拉菜单发送消息，最终都会触发 `SubmitAction` 的 `run` 方法。具体参考 [VSCode-action](./[Copilot]VSCode-action.md)。
 
 ```typescript
 abstract class SubmitAction extends Action2 {
@@ -74,8 +83,6 @@ abstract class SubmitAction extends Action2 {
 	}
 }
 ```
-
-这里的 Widget 可以是从上下文里获取的，也可以是通过 IChatWidgetService 获取的最后一个聚焦的 Widget。这里调用直接看 ChatWidget 类的 acceptInput 方法。
 
 ### acceptInput
 
@@ -183,7 +190,7 @@ flowchart TD
 
 ## 消息渲染
 
-和 [Chat 界面初始化](#chat-界面初始化) 一样，渲染的逻辑也在 ChatWidget 的 render 方法。
+与 [Chat 界面初始化](#chat-界面初始化) 类似，消息渲染的逻辑也在 `ChatWidget` 的 `render` 方法中。
 
 ```typescript
 export class ChatWidget extends Disposable implements IChatWidget { 
@@ -200,7 +207,7 @@ export class ChatWidget extends Disposable implements IChatWidget {
 }
 ```
 
-这里的 `createList` 方法会创建一个 `ListView`，并传入 `ChatWidget` 的 `renderStyle` 作为参数。
+`createList` 方法会创建一个 `ListView`，并传入 `ChatWidget` 的 `renderStyle` 作为参数。
 
 ```typescript
 export class ChatWidget extends Disposable implements IChatWidget { 
@@ -350,16 +357,11 @@ export class ChatListItemRenderer extends Disposable implements ITreeRenderer<Ch
 
 具体渲染的内容会根据不同的 kind 进行渲染，比如 markdown、codeCitations、toolInvocation 等等。这里就不一一列举了。
 
-
 ## inlineChat
 
-inlineChat 作为 VSCode 中的 contrib 进行加载。其原理和 Chat 在 Ask 模式下相似，相关代码在 `src/vs/workbench/contrib/inlineChat` 中。
+`inlineChat` 作为 VSCode 中的 contrib 进行加载，其原理与 Chat 在 Ask 模式下相似。相关代码位于 `src/vs/workbench/contrib/inlineChat` 中。
 
-在 `inlineChat.contribution.ts` 中，需要注册 EditorContribution 以实现扩展 Editor 的功能，比如在 Editor 中通过快捷键 <kbd>cmd</kbd> + <kbd>i</kbd> 可以快速唤起 inlineChat。
-
-除此之外，还需要注册 actions，以支持上述的快捷键和其他一些功能。
-
-接下来我们通过「<kbd>cmd</kbd> + <kbd>i</kbd> 可以快速唤起 inlineChat」这个功能作为切入点看看代码逻辑。
+在 `inlineChat.contribution.ts` 中，需要注册 `EditorContribution` 以扩展 Editor 的功能，例如通过快捷键 <kbd>cmd</kbd> + <kbd>i</kbd> 快速唤起 `inlineChat`。
 
 ### StartSessionAction
 
@@ -385,7 +387,6 @@ export class StartSessionAction extends Action2 {
 ```
 
 该 action 的核心逻辑在于执行 `InlineChatController.get(editor)?.run({ ...options });`
-
 
 ### InlineChatController
 
@@ -446,8 +447,8 @@ export class InlineChatController1 implements IEditorContribution {
 这里的状态流程如下：
 ```mermaid
 flowchart TD
-	A[Start: State.CREATE_SESSION] --> B[State.INIT_UI]
-	A --> C[State.CANCEL]
+    A[Start: State.CREATE_SESSION] --> B[State.INIT_UI]
+    A --> C[State.CANCEL]
     B --> D[State.WAIT_FOR_INPUT]
     B --> E[State.SHOW_REQUEST]
     D --> F[State.ACCEPT]
@@ -554,3 +555,7 @@ Session 实例的创建，需要提供 chatAgent（从 chatAgentService 获取�
 - 重置 Widget，重置 session，销毁 strategy
 - 执行 strategy.cancel() 以取消应用当前回答的 edits
 - 相比 State.PAUSE 状态做的事，该状态多一个判断 session 是否需要 stash 的操作
+
+## 总结
+
+本文详细介绍了 VSCode 中 Chat 和 inlineChat 的加载、消息发送、渲染逻辑及其实现方式。通过对这些机制的理解，开发者可以更高效地扩展 VSCode 的功能，提升用户体验。

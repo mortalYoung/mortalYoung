@@ -21,7 +21,6 @@
  Have been tried to struggle in 
  <p align="center">
   <img src="https://img.shields.io/badge/UI Library-blue" />
-  <img src="https://img.shields.io/badge/SaSS-blue" />
   <img src="https://img.shields.io/badge/Node.js-CLI devtool-blue" />
   <img src="https://img.shields.io/badge/Web IDE-blue" />
   <img src="https://img.shields.io/badge/MVC-blue" />

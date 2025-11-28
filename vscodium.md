@@ -80,5 +80,5 @@ description: localize('updateMode', "Configure whether you receive automatic upd
 ## 总结
 
 事实上，上述提到的很多改动，在 VSCodium 项目中已经做了类似的处理。具体相关实现可以参考 [VSCodium](https://github.com/VSCodium/vscodium)。
-****
+
 然而该项目中的很多改动也并不完善，例如很多功能移除并不是删除代码，而是禁用。但是 VSCodium 项目为我们提供了一个有价值的起点，通过参考其改动，我们可以更好地理解如何将 VSCode 转变为一个独立的 AI IDE。希望本文的拆解，能为你的技术选型与架构设计提供有力的决策依据。

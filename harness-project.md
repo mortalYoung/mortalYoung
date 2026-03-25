@@ -1,12 +1,14 @@
-# Harness Project：构建 Agent 应用的最佳实践
+# Harness Project：基于 Agent 的项目长时间持续迭代的最佳实践
 
 ## 前言
 
-随着 Claude 等大模型能力的不断提升，越来越多的团队开始尝试构建 Agent 应用。然而，大多数团队在落地过程中都会遇到同样的困境：Agent 能力强大，却难以驾驭——它可能在某个环节偏离预期，也可能在没有约束的情况下产生不可预测的行为。
+随着 Claude 等大模型能力的不断提升，越来越多的团队开始尝试构建 Agent 应用。然而，当一个基于 Agent 的项目从原型走向长期运营，真正的挑战才刚刚开始：**如何让 Agent 应用在数周、数月乃至数年的持续迭代中始终保持可控、可维护、可演进？**
 
-**如何驾驭 Agent？** 这是构建 Agent 应用的核心命题。尤其是对于**长时间运行的 Agent（Long-running Agents）**——那些需要在数分钟、数小时甚至数天内持续自主执行复杂任务的系统——这一挑战尤为突出：任务越长，上下文越复杂，偏离预期的风险也越高。
+大多数团队在落地过程中都会遇到同样的困境：Agent 能力强大，却难以驾驭——它可能在某个环节偏离预期，也可能在没有约束的情况下产生不可预测的行为。随着项目持续迭代，这一问题会愈发严峻：需求在变，上下文在积累，Agent 的行为边界也需要不断调整。
 
-本文提出一种专为长时间运行的 Agent 场景设计的架构范式——**Harness Project**。其核心定义为：
+**本文的核心观点是：基于 Agent 的项目，长时间持续迭代的最佳实践是将该项目 Harness 化。**
+
+所谓"Harness 化"，即将项目纳入 **Harness Project** 架构范式进行管理。其核心定义为：
 
 $$
 \textit{Harness} = \textit{Agent} + \textit{State} + \textit{Reins}
@@ -210,18 +212,20 @@ Git Native Project 特别适合以下场景：
 
 ## 总结
 
-Harness Project 为构建 Agent 应用提供了一套完整的架构范式：
+**将 Agent 项目 Harness 化，是基于 Agent 的项目长时间持续迭代的最佳实践。** 这一结论来自于工程实践中的核心洞察：Agent 应用的生命周期远不止于初次搭建，更在于数月乃至数年的持续演进——而 Harness 架构正是为这种长周期迭代而设计的。
 
-| 组件 | 职责 | 核心价值 |
+Harness Project 为 Agent 应用提供了一套完整的架构范式：
+
+| 组件 | 职责 | 对持续迭代的价值 |
 |------|------|---------|
-| **Agent** | 执行任务 | 提供智能推理与工具调用能力 |
-| **State** | 存储上下文 | 保证 Agent 的决策质量与连贯性 |
-| **Reins** | 约束行为 | 确保 Agent 的可控性与可信性 |
+| **Agent** | 执行任务 | 提供智能推理与工具调用能力，随模型升级持续增强 |
+| **State** | 存储上下文 | 保证跨迭代周期的决策质量与任务连贯性 |
+| **Reins** | 约束行为 | 在需求变化时灵活调整 Agent 的行为边界 |
 
-而 **Git Native Project** 则在此基础上更进一步，将成熟的版本控制体系引入 Agent 的 State 管理，解决了版本追踪、状态回滚、并行探索和人机协作等一系列工程挑战。
+而 **Git Native Project** 则在此基础上更进一步，将成熟的版本控制体系引入 Agent 的 State 管理，解决了版本追踪、状态回滚、并行探索和人机协作等一系列工程挑战——这些恰恰是长期迭代项目最需要的能力。
 
 正如 Anthropic 在其 Agent 构建指南中所强调的：
 
 > *"The key question is not whether to use AI agents, but how to build them in a way that is safe, reliable, and aligned with human intent."*
 
-Harness Project 的答案是：通过 State 给 Agent 以记忆，通过 Reins 给 Agent 以边界，通过 Git Native 给 Agent 以历史——让 Agent 的力量在可控的轨道上充分释放。
+将项目 Harness 化，就是对这个问题的工程回答：通过 State 给 Agent 以记忆，通过 Reins 给 Agent 以边界，通过 Git Native 给 Agent 以历史——让 Agent 应用在长期迭代中始终可控、可维护、可演进。

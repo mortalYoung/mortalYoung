@@ -4,9 +4,9 @@
 
 随着 Claude 等大模型能力的不断提升，越来越多的团队开始尝试构建 Agent 应用。然而，大多数团队在落地过程中都会遇到同样的困境：Agent 能力强大，却难以驾驭——它可能在某个环节偏离预期，也可能在没有约束的情况下产生不可预测的行为。
 
-**如何驾驭 Agent？** 这是构建 Agent 应用的核心命题。
+**如何驾驭 Agent？** 这是构建 Agent 应用的核心命题。尤其是对于**长时间运行的 Agent（Long-running Agents）**——那些需要在数分钟、数小时甚至数天内持续自主执行复杂任务的系统——这一挑战尤为突出：任务越长，上下文越复杂，偏离预期的风险也越高。
 
-本文提出一种构建 Agent 应用的架构范式——**Harness Project**。其核心定义为：
+本文提出一种专为长时间运行的 Agent 场景设计的架构范式——**Harness Project**。其核心定义为：
 
 $$
 \textit{Harness} = \textit{Agent} + \textit{State} + \textit{Reins}
@@ -175,6 +175,19 @@ main
 ├── feature/solution-b  ← Subagent B 探索方案 B
 └── feature/solution-c  ← Subagent C 探索方案 C
 ```
+
+并行管理的关键在于：**多个 Agent 如何在同一仓库的不同 Branch 上同时工作，而互不干扰？** 答案是 **Git Worktree**。
+
+`git worktree` 允许将同一个仓库的不同分支同时 checkout 到不同的文件系统目录，每个目录拥有独立的工作区，但共享同一套 Git 对象存储：
+
+```
+project-repo/              ← main 分支（主工作区）
+project-repo-solution-a/   ← feature/solution-a（Subagent A 工作区）
+project-repo-solution-b/   ← feature/solution-b（Subagent B 工作区）
+project-repo-solution-c/   ← feature/solution-c（Subagent C 工作区）
+```
+
+每个 Subagent 在自己的 Worktree 目录中独立运行，无需切换分支，也不会相互阻塞。这使得并行 Agent 的资源隔离变得简单而高效。
 
 **4. 协作与审查（Collaboration & Review）**
 

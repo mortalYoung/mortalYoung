@@ -5,7 +5,7 @@ _Hi. There._
 </h1>
 
 <div align="center">
-
+        
 ```
         ▄▄▄▄▄▄▄▄▄▄▄▄
       ▄▀▀▀▀▀▀▀▀▀▀▀▀▀▀▄
@@ -18,6 +18,9 @@ _Hi. There._
           ▀█████████▀
 ```
 
+</div>
+
+<div align="center">
 <img src="./images/status-window.svg" width="640" alt="Character Status" />
 
 </div>

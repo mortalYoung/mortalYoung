@@ -1,44 +1,39 @@
 <h1 align="center">
- Hi guys, It's Yang.
+
+    _Hi. There._
+
 </h1>
-<div>
 
 <div align="center">
-<img src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&pause=1000&center=true&vCenter=true&width=600&separator=%3C&lines=console.log(%22hello+world%22);" alt="Typing SVG" width="600" />
+
+```
+        ▄▄▄▄▄▄▄▄▄▄▄▄
+      ▄▀▀▀▀▀▀▀▀▀▀▀▀▀▀▄
+     █▌   ▄▄▄   ▄▄▄   ▐█
+     █▌   ███   ███   ▐█
+     █▌   ▀▀▀   ▀▀▀   ▐█
+     █▌                 ▐█
+      █▄     ████     ▄█
+       ▀█▄▄         ▄▄█▀
+          ▀█████████▀
+```
+
+<img src="./images/status-window.svg" width="640" alt="Character Status" />
+
 </div>
 
+<br>
+
 <div align="center">
 
- ![status](https://img.shields.io/badge/status-up-brightgreen) 
 ![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FmortalYoung&countColor=%232ccce4&style=flat)
-
-<img src="./images/avatar.svg" width="130" alt="avatar" />
+![status](https://img.shields.io/badge/status-online-brightgreen)
 
 </div>
 
-<p align="center">I'm from China as a <strong>Front-End engineer</strong>. I'm currently working on <strong>DTStack</strong>.<p>
-<p align="center">
- Have been tried to struggle in 
- <p align="center">
-  <img src="https://img.shields.io/badge/UI Library-blue" />
-  <img src="https://img.shields.io/badge/Node.js-CLI devtool-blue" />
-  <img src="https://img.shields.io/badge/Web IDE-blue" />
-  <img src="https://img.shields.io/badge/MVC-blue" />
-  <img src="https://img.shields.io/badge/FrontEnd Performance-blue" />
-  <img src="https://img.shields.io/badge/devops-blue" />
- </p>
-</p>
+<br>
 
-
-## 📚 Tech
-![Static Badge](https://img.shields.io/badge/MacOS-blue)
-![Static Badge](https://img.shields.io/badge/IDE-Plugin-blue)
-![Static Badge](https://img.shields.io/badge/JavaScript-TypeScript-blue)
-![Static Badge](https://img.shields.io/badge/Node.js-blue)
-![Static Badge](https://img.shields.io/badge/React-blue)
-
-## Stats
-| Github Stats | Top Languages |
-| --- | --- |
-| <img align="center" src="https://github-readme-stats.vercel.app/api?username=mortalyoung&show_icons=true&theme=radical" /> |   <img align="center" src="https://github-readme-stats.vercel.app/api/top-langs/?username=mortalyoung&layout=compact&theme=radical" /> |
-
+<div align="center">
+  <img height="165" src="https://github-readme-stats.vercel.app/api?username=mortalyoung&show_icons=true&hide_border=true&bg_color=12122a&title_color=c9a96e&text_color=a0a0b0&icon_color=c9a96e&ring_color=c9a96e&hide_title=true&rank_icon=percentile" />
+  <img height="165" src="https://github-readme-stats.vercel.app/api/top-langs/?username=mortalyoung&layout=compact&hide_border=true&bg_color=12122a&title_color=c9a96e&text_color=a0a0b0" />
+</div>

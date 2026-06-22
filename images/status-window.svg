@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 540">
+  <defs>
+    <linearGradient id="hpBar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#8b0000"/>
+      <stop offset="100%" stop-color="#e74c3c"/>
+    </linearGradient>
+    <linearGradient id="mpBar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1a5276"/>
+      <stop offset="100%" stop-color="#3498db"/>
+    </linearGradient>
+    <linearGradient id="skillBar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#6b5335"/>
+      <stop offset="100%" stop-color="#c9a96e"/>
+    </linearGradient>
+    <pattern id="scanlines" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="1" fill="#ffffff" opacity="0.02"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect x="10" y="10" width="620" height="520" rx="4" fill="#0d0d1a"/>
+
+  <!-- Outer border -->
+  <rect x="10" y="10" width="620" height="520" rx="4" fill="none" stroke="#8b7355" stroke-width="1.5" opacity="0.7"/>
+  <!-- Inner border -->
+  <rect x="14" y="14" width="612" height="512" rx="3" fill="none" stroke="#c9a96e" stroke-width="1" opacity="0.5"/>
+
+  <!-- Main panel -->
+  <rect x="15" y="15" width="610" height="510" rx="2" fill="#12122a"/>
+  <rect x="15" y="15" width="610" height="510" rx="2" fill="url(#scanlines)"/>
+
+  <!-- Corner brackets -->
+  <path d="M 10 36 L 10 10 L 36 10" fill="none" stroke="#c9a96e" stroke-width="2" opacity="0.5"/>
+  <path d="M 630 36 L 630 10 L 604 10" fill="none" stroke="#c9a96e" stroke-width="2" opacity="0.5"/>
+  <path d="M 10 504 L 10 530 L 36 530" fill="none" stroke="#c9a96e" stroke-width="2" opacity="0.5"/>
+  <path d="M 630 504 L 630 530 L 604 530" fill="none" stroke="#c9a96e" stroke-width="2" opacity="0.5"/>
+
+  <!-- Title -->
+  <text x="320" y="48" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="20" fill="#c9a96e" letter-spacing="4">✦ CHARACTER STATUS ✦</text>
+
+  <!-- Title underline -->
+  <line x1="100" y1="60" x2="260" y2="60" stroke="#252540" stroke-width="1"/>
+  <polygon points="320,56 324,60 320,64 316,60" fill="#c9a96e" opacity="0.4"/>
+  <line x1="380" y1="60" x2="540" y2="60" stroke="#252540" stroke-width="1"/>
+
+  <!-- ===== BASIC INFO ===== -->
+  <text x="50" y="86" font-family="'Courier New', 'SF Mono', monospace" font-size="12" fill="#c9a96e">名前 / NAME</text>
+  <text x="280" y="86" font-family="'Courier New', 'SF Mono', monospace" font-size="13" fill="#d4c5a9">Yang</text>
+
+  <text x="50" y="114" font-family="'Courier New', 'SF Mono', monospace" font-size="12" fill="#c9a96e">職業 / CLASS</text>
+  <text x="280" y="114" font-family="'Courier New', 'SF Mono', monospace" font-size="13" fill="#d4c5a9">Front-End Engineer</text>
+
+  <text x="50" y="142" font-family="'Courier New', 'SF Mono', monospace" font-size="12" fill="#c9a96e">所属 / GUILD</text>
+  <text x="280" y="142" font-family="'Courier New', 'SF Mono', monospace" font-size="13" fill="#d4c5a9">DTStack</text>
+
+  <!-- ===== SECTION: STATS ===== -->
+  <line x1="50" y1="180" x2="220" y2="180" stroke="#252540" stroke-width="1"/>
+  <text x="320" y="184" text-anchor="middle" font-family="'Courier New', 'SF Mono', monospace" font-size="11" fill="#8b7355">能力値 / STATS</text>
+  <line x1="420" y1="180" x2="590" y2="180" stroke="#252540" stroke-width="1"/>
+
+  <!-- HP -->
+  <text x="50" y="210" font-family="'Courier New', 'SF Mono', monospace" font-size="12" fill="#e74c3c">HP</text>
+  <rect x="180" y="200" width="320" height="12" rx="2" fill="#1a1a32"/>
+  <rect x="180" y="200" width="262" height="12" rx="2" fill="url(#hpBar)"/>
+  <text x="520" y="210" font-family="'Courier New', 'SF Mono', monospace" font-size="10" fill="#6a6a7a">820 / 1000</text>
+
+  <!-- MP -->
+  <text x="50" y="238" font-family="'Courier New', 'SF Mono', monospace" font-size="12" fill="#3498db">MP</text>
+  <rect x="180" y="228" width="320" height="12" rx="2" fill="#1a1a32"/>
+  <rect x="180" y="228" width="208" height="12" rx="2" fill="url(#mpBar)"/>
+  <text x="520" y="238" font-family="'Courier New', 'SF Mono', monospace" font-size="10" fill="#6a6a7a">650 / 1000</text>
+
+  <!-- ===== SECTION: SKILLS ===== -->
+  <line x1="50" y1="276" x2="215" y2="276" stroke="#252540" stroke-width="1"/>
+  <text x="320" y="280" text-anchor="middle" font-family="'Courier New', 'SF Mono', monospace" font-size="11" fill="#8b7355">スキル / SKILLS</text>
+  <line x1="425" y1="276" x2="590" y2="276" stroke="#252540" stroke-width="1"/>
+
+  <!-- TypeScript -->
+  <text x="50" y="304" font-family="'Courier New', 'SF Mono', monospace" font-size="11" fill="#d4c5a9">TypeScript</text>
+  <rect x="190" y="298" width="260" height="8" rx="2" fill="#1a1a32"/>
+  <rect x="190" y="298" width="221" height="8" rx="2" fill="url(#skillBar)"/>
+  <text x="470" y="304" font-family="'Courier New', 'SF Mono', monospace" font-size="10" fill="#8b7355">Lv.85</text>
+
+  <!-- React -->
+  <text x="50" y="328" font-family="'Courier New', 'SF Mono', monospace" font-size="11" fill="#d4c5a9">React</text>
+  <rect x="190" y="322" width="260" height="8" rx="2" fill="#1a1a32"/>
+  <rect x="190" y="322" width="221" height="8" rx="2" fill="url(#skillBar)"/>
+  <text x="470" y="328" font-family="'Courier New', 'SF Mono', monospace" font-size="10" fill="#8b7355">Lv.85</text>
+
+  <!-- Node.js -->
+  <text x="50" y="352" font-family="'Courier New', 'SF Mono', monospace" font-size="11" fill="#d4c5a9">Node.js</text>
+  <rect x="190" y="346" width="260" height="8" rx="2" fill="#1a1a32"/>
+  <rect x="190" y="346" width="195" height="8" rx="2" fill="url(#skillBar)"/>
+  <text x="470" y="352" font-family="'Courier New', 'SF Mono', monospace" font-size="10" fill="#8b7355">Lv.75</text>
+
+  <!-- Web IDE -->
+  <text x="50" y="376" font-family="'Courier New', 'SF Mono', monospace" font-size="11" fill="#d4c5a9">Web IDE</text>
+  <rect x="190" y="370" width="260" height="8" rx="2" fill="#1a1a32"/>
+  <rect x="190" y="370" width="169" height="8" rx="2" fill="url(#skillBar)"/>
+  <text x="470" y="376" font-family="'Courier New', 'SF Mono', monospace" font-size="10" fill="#8b7355">Lv.65</text>
+
+  <!-- DevOps -->
+  <text x="50" y="400" font-family="'Courier New', 'SF Mono', monospace" font-size="11" fill="#d4c5a9">DevOps</text>
+  <rect x="190" y="394" width="260" height="8" rx="2" fill="#1a1a32"/>
+  <rect x="190" y="394" width="143" height="8" rx="2" fill="url(#skillBar)"/>
+  <text x="470" y="400" font-family="'Courier New', 'SF Mono', monospace" font-size="10" fill="#8b7355">Lv.55</text>
+
+  <!-- ===== SECTION: TITLES ===== -->
+  <line x1="50" y1="436" x2="218" y2="436" stroke="#252540" stroke-width="1"/>
+  <text x="320" y="440" text-anchor="middle" font-family="'Courier New', 'SF Mono', monospace" font-size="11" fill="#8b7355">称号 / TITLES</text>
+  <line x1="422" y1="436" x2="590" y2="436" stroke="#252540" stroke-width="1"/>
+
+  <!-- Achievement 1 -->
+  <text x="50" y="466" font-family="'Courier New', 'SF Mono', monospace" font-size="11" fill="#d4c5a9">✦ UI Library Architect</text>
+
+  <!-- Achievement 2 -->
+  <text x="50" y="490" font-family="'Courier New', 'SF Mono', monospace" font-size="11" fill="#d4c5a9">✦ DevTools Creator</text>
+
+  <!-- Achievement 3 -->
+  <text x="50" y="514" font-family="'Courier New', 'SF Mono', monospace" font-size="11" fill="#d4c5a9">✦ Open Source Contributor</text>
+</svg>
